@@ -5,7 +5,6 @@ from typing import Optional
 from aiohttp import web
 from dotenv import load_dotenv
 from backend.tools.rag.ai_search import report_grounding_tool, search_tool
-from backend.tools.reportstore.cosmos import CosmosDBStore
 from backend.helpers import load_prompt_from_markdown
 from backend.rtmt import RTMiddleTier
 from backend.azure import get_azure_credentials, fetch_prompt_from_azure_storage
@@ -21,7 +20,6 @@ async def create_app():
     load_dotenv()
 
     azure_credentials = get_azure_credentials(os.environ.get("AZURE_TENANT_ID"))
-    cosmos: Optional[CosmosDBStore] = None
     search_client: Optional[SearchClient] = None
     caller: Optional[AcsCaller] = None
 
@@ -44,21 +42,6 @@ async def create_app():
     else:
         logger.warning("Azure AI Search is not configured")
 
-    # Load Cosmos DB connection and authentication
-    cosmos_endpoint = os.environ.get("COSMOSDB_ACCOUNT_ENDPOINT")
-    cosmos_db_name = os.environ.get("COSMOSDB_DATABASE_NAME")
-    cosmos_container_name = os.environ.get("COSMOSDB_CONTAINER_NAME")
-    if (cosmos_endpoint is not None and
-        cosmos_db_name is not None and
-        cosmos_container_name is not None):
-        cosmos = CosmosDBStore(
-            cosmos_endpoint,
-            cosmos_db_name,
-            cosmos_container_name
-        )
-    else:
-        logger.warning("CosmosDB is not configured")
-    
     # Register the Azure Communication Services
     acs_source_number = os.environ.get("ACS_SOURCE_NUMBER")
     acs_connection_string = os.environ.get("ACS_CONNECTION_STRING")

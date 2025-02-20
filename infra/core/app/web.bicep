@@ -12,7 +12,6 @@ param communicationServicePhoneNumber string
 param serviceName string = 'web'
 param imageName string
 param openaiName string
-param databaseAccountName string
 
 resource userIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' existing = {
   name: identityName
@@ -71,18 +70,6 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
             {
               name: 'OPENAI_API_TYPE'
               value: 'azure'
-            }
-            {
-              name: 'COSMOSDB_ACCOUNT_ENDPOINT'
-              value: database.properties.documentEndpoint
-            }
-            {
-              name: 'COSMOSDB_CONTAINER_NAME'
-              value: 'reports'
-            }
-            {
-              name: 'COSMOSDB_DATABASE_NAME'
-              value: 'mobile'
             }
             { 
               name: 'ACS_SOURCE_NUMBER'
@@ -158,10 +145,6 @@ resource communicationService 'Microsoft.Communication/CommunicationServices@202
 
 resource applicationInsights 'Microsoft.Insights/components@2020-02-02' existing = {
   name: applicationInsightsName
-}
-
-resource database 'Microsoft.DocumentDB/databaseAccounts@2024-05-15' existing = {
-  name: databaseAccountName
 }
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {

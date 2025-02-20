@@ -15,7 +15,6 @@ param principalId string
 @description('Id of the user or app to assign application roles')
 param resourceGroupName string = ''
 param openaiName string = ''
-param cosmosDbAccountName string = ''
 param containerAppsEnvironmentName string = ''
 param containerRegistryName string = ''
 
@@ -55,8 +54,6 @@ var principalType = 'User'
 
 param logAnalyticsName string = ''
 param applicationInsightsName string = ''
-param cosmosDatabaseName string = 'mobile'
-param cosmosContainerName string = 'reports'
 param completionDeploymentModelName string = 'gpt-4o-realtime-preview'
 param completionModelName string = 'gpt-4o-realtime-preview'
 param completionModelVersion string = '2024-12-17'
@@ -124,18 +121,6 @@ module openai './ai/openai.bicep' = {
   }
 }
 
-module cosmodDb './core/data/cosmosdb.bicep' = {
-  name: 'sql'
-  scope: resourceGroup
-  params: {
-    location: location
-    accountName: !empty(cosmosDbAccountName) ? cosmosDbAccountName : '${abbrs.cosmosDbAccount}${resourceToken}'
-    databaseName: cosmosDatabaseName
-    containerName: cosmosContainerName
-    tags: tags
-  }
-}
-
 module monitoring './core/monitor/monitoring.bicep' = {
   name: 'monitoring'
   scope: resourceGroup
@@ -144,21 +129,6 @@ module monitoring './core/monitor/monitoring.bicep' = {
     tags: tags
     logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
     applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
-  }
-}
-
-module security 'core/security/security-main.bicep' = {
-  name: 'security'
-  scope: resourceGroup
-  params: {
-    openaiName: openai.outputs.openaiName
-    containerRegistryName: containerApps.outputs.registryName
-    databaseAccountName: cosmodDb.outputs.name
-    principalIds: [
-      containerApps.outputs.identityPrincipalId
-      searchService.outputs.systemAssignedMIPrincipalId
-      principalId
-    ]
   }
 }
 
@@ -289,11 +259,6 @@ output AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME string = completionDeploymentMode
 
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = embedModel
 output AZURE_OPENAI_EMBEDDING_MODEL string = embedModel
-
-output COSMOSDB_ACCOUNT_ENDPOINT string = cosmodDb.outputs.endpoint
-output COSMOSDB_ACCOUNT_KEY string = cosmodDb.outputs.key
-output COSMOSDB_DATABASE_NAME string = cosmosDatabaseName
-output COSMOSDB_CONTAINER_NAME string = cosmosContainerName
 
 output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
 output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName

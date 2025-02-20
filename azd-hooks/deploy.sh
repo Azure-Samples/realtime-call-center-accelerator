@@ -44,8 +44,6 @@ ENVIRONMENT_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsof
 IDENTITY_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.ManagedIdentity/userAssignedIdentities" --query "[0].name" -o tsv)
 # Get the Azure subscription ID
 AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-# Get the name of the Azure CosmosDB account
-COSMOSDB_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.DocumentDB/databaseAccounts" --query "[0].name" -o tsv)
 # Get Azure Search service name
 AZURE_SEARCH_NAME=$(az resource list -g $RESOURCE_GROUP --resource-type "Microsoft.Search/searchServices" --query "[0].name" -o tsv)
 # Get the first index name from the Azure Search service
@@ -72,7 +70,6 @@ fi
 echo "container registry name: $AZURE_CONTAINER_REGISTRY_NAME"
 echo "application insights name: $APPINSIGHTS_NAME"
 echo "openai name: $OPENAI_NAME"
-echo "cosmosdb name: $COSMOSDB_NAME"
 echo "identity name: $IDENTITY_NAME"
 echo "service name: $SERVICE_NAME"
 echo "environment name: $ENVIRONMENT_NAME"
@@ -105,7 +102,7 @@ ACA_NAME=callcenter$SERVICE_NAME
 URI=$(az deployment group create -g $RESOURCE_GROUP -f ./infra/core/app/web.bicep \
           -p aiSearchName=$AZURE_SEARCH_NAME  -p storageAccountName=$STORAGE_ACCOUNT_NAME -p name=$ACA_NAME -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
           -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME -p communicationServiceName=$AZURE_COMMUNICATION_SERVICES_NAME -p serviceName=$SERVICE_NAME  \
-          -p communicationServicePhoneNumber=$AZURE_COMMUNICATION_SERVICES_PHONE_NUMBER -p openaiName=$OPENAI_NAME -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME -p databaseAccountName=$COSMOSDB_NAME --query properties.outputs.uri.value)
+          -p communicationServicePhoneNumber=$AZURE_COMMUNICATION_SERVICES_PHONE_NUMBER -p openaiName=$OPENAI_NAME -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME -p --query properties.outputs.uri.value)
 
 echo "updating container app settings"
 
