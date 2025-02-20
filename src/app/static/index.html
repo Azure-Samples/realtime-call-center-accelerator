@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Azure Call Center Agent</title>
+    <!-- Include Pico.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2.0.6/css/pico.min.css" />
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css" />
+    <!-- Import Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Use a modern sans-serif font -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet" />
+  </head>
+
+  <body>
+    <div class="flex-container">
+      <div class="logo-container">
+        <img src="/static/logo.svg" alt="Logo" />
+      </div>
+      <div class="titles-container">
+        <!-- Title -->
+        <h1>Azure Call Center Agent</h1>
+        <h2>Talk to your agent</h2>
+      </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+      <h2>Configuration</h2>
+      <div class="dropdown-container">
+        <label for="themeSelect">Choose a voice before launching the conversation:</label>
+        <select id="themeSelect" name="themeSelect">
+          <option value="alloy">Alloy</option>
+          <option value="ash">Ash</option>
+          <option value="ballad">Ballad</option>
+          <option value="coral">Coral</option>
+          <option value="echo">Echo</option>
+          <option value="sage">Sage</option>
+        </select>
+      </div>
+    </div>
+    <button id="configButton">Config</button>
+    <!-- Main Container -->
+    <div class="main-container">
+      <main class="container">
+        <article id="1" class="side-by-side">
+          <h3>In your browser</h3>
+          <button id="toggleButton" class="black-button">Start Conversation</button>
+          <div id="statusMessage"></div>
+          <pre id="report"></pre>
+        </article>
+        <div class="separator"></div>
+        <article id="2" class="side-by-side">
+          <h3>On your phone</h3>
+          <form onsubmit="event.preventDefault();">
+            <input type="text" id="phonenumber" placeholder="Your phone number here" />
+            <button id="callButton" class="black-button">Call my phone</button>
+          </form>
+          <div id="statusMessage"></div>
+          <pre id="report"></pre>
+        </article>
+      </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const themeSelect = document.getElementById('themeSelect');
+
+        themeSelect.addEventListener('change', function () {
+          const selectedVoice = themeSelect.value;
+          updateVoiceOnServer(selectedVoice);
+        });
+
+        const configButton = document.getElementById('configButton');
+        const sidebar = document.getElementById('sidebar');
+
+        configButton.addEventListener('click', () => {
+          const isVisible = sidebar.style.display === 'none' || sidebar.style.display === '';
+          sidebar.style.display = isVisible ? 'block' : 'none';
+          document.body.classList.toggle('sidebar-visible', isVisible);
+        });
+      });
+    </script>
+  </body>
+</html>

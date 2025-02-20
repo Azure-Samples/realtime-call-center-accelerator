@@ -1,0 +1,15 @@
+name: ai-agents-as-a-platform
+metadata:
+  template: openai-plugin-fastapi@0.0.1-beta
+hooks:
+  postprovision:
+    posix:
+      shell: sh
+      continueOnError: false
+      interactive: true
+      run: azd-hooks/post-provision.sh
+  postdeploy: # Pull environment variable inline from local device and set in .env file
+      shell: sh
+      run: cp .azure/$AZURE_ENV_NAME/.env ./
+infra:
+  provider: bicep

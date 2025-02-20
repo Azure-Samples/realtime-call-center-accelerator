@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "openaiCapacity": {
+      "value": "${OPENAI_CAPACITY}"
+    },
+    "searchServiceSkuName": {
+      "value": "${AZURE_SEARCH_SERVICE_SKU=standard}"
+    },
+    "searchServiceSemanticRankerLevel": {
+      "value": "${AZURE_SEARCH_SEMANTIC_RANKER=free}"
+    },
+    "searchEndpoint": {
+      "value": "${AZURE_SEARCH_ENDPOINT}"
+    },
+    "searchIndexName": {
+      "value": "${AZURE_SEARCH_INDEX=voicerag-intvect}"
+    },
+    "searchSemanticConfiguration":{
+      "value": "${AZURE_SEARCH_SEMANTIC_CONFIGURATION=default}"
+    },
+    "searchIdentifierField": {
+      "value": "${AZURE_SEARCH_IDENTIFIER_FIELD=chunk_id}"
+    },
+    "searchContentField": {
+      "value": "${AZURE_SEARCH_CONTENT_FIELD=chunk}"
+    },
+    "searchTitleField": {
+      "value": "${AZURE_SEARCH_TITLE_FIELD=title}"
+    },
+    "searchEmbeddingField": {
+      "value": "${AZURE_SEARCH_EMBEDDING_FIELD=text_vector}"
+    },
+    "searchUseVectorQuery": {
+      "value": "${AZURE_SEARCH_USE_VECTOR_QUERY=true}"
+    },
+    "storageAccountName": {
+      "value": "${AZURE_STORAGE_ACCOUNT}"
+    },
+    "searchServiceLocation": {
+      "value": "${AZURE_SEARCH_SERVICE_LOCATION}"
+    },
+    "aiResourceLocation": {
+      "value": "${AZURE_AI_RESOURCE_LOCATION}"
+    },
+    "realtimeDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_REALTIME_DEPLOYMENT_CAPACITY=1}"
+    },
+    "embeddingDeploymentCapacity": {
+      "value": "${AZURE_OPENAI_EMB_DEPLOYMENT_CAPACITY=30}"
+    },
+    "embeddingDimensions": {
+      "value": "${AZURE_OPENAI_EMB_DIMENSIONS}"
+    }
+  }
+}

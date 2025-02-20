@@ -1,0 +1,12 @@
+aiohttp==3.11.10
+azure-identity==1.19.0
+azure-eventgrid==4.20.0
+azure.cosmos==4.7.0
+azure-communication-callautomation==1.4.0b1
+gunicorn==23.0.0
+openai==1.59.7
+python-dotenv==1.0.1
+azure-search-documents==11.6.0b4
+azure-storage-blob==12.23.1
+gunicorn
+rich

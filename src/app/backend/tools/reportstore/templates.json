@@ -1,0 +1,63 @@
+[
+    {
+        "id": "368814",
+        "department": "sales",
+        "fields": [
+            {
+                "id": "1",
+                "name": "name",
+                "type": "string",
+                "description": "Name of the customer"
+            },
+            {
+                "id": "2",
+                "name": "feedback",
+                "type": "string",
+                "description": "Feedback from the customer about the meeting"
+            },
+            {
+                "id": "3",
+                "name": "product",
+                "type": "string",
+                "description": "Product discussed with the customer"
+            },
+            {
+                "id": "4",
+                "name": "date",
+                "type": "date",
+                "description": "Date of the meeting"
+            }
+        ]
+    },
+    {
+        "id": "368815",
+        "department": "hr",
+        "fields": [
+            {
+                "id": "1",
+                "name": "name",
+                "type": "string",
+                "description": "Name of the employee"
+            },
+            {
+                "id": "2",
+                "name": "feedback",
+                "type": "string",
+                "description": "Feedback from the employee about the training"
+            },
+            {
+                "id": "3",
+                "name": "training",
+                "type": "string",
+                "description": "Training attended by the employee"
+            },
+            {
+                "id": "4",
+                "name": "date",
+                "type": "date",
+                "description": "Date of the training"
+            }
+        ]
+    }
+]
+
