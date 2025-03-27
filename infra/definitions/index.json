@@ -1,0 +1,119 @@
+{
+    "name": "{INDEX_NAME}",
+    "defaultScoringProfile": null,
+    "fields": [
+        {
+            "name": "chunk_id",
+            "type": "Edm.String",
+            "searchable": true,
+            "filterable": false,
+            "retrievable": true,
+            "stored": true,
+            "sortable": true,
+            "facetable": false,
+            "key": true,
+            "analyzer": "keyword"
+        },
+        {
+            "name": "parent_id",
+            "type": "Edm.String",
+            "searchable": false,
+            "filterable": true,
+            "retrievable": true,
+            "stored": true,
+            "sortable": false,
+            "facetable": false,
+            "key": false
+        },
+        {
+            "name": "title",
+            "type": "Edm.String",
+            "searchable": true,
+            "filterable": false,
+            "retrievable": true,
+            "stored": true,
+            "sortable": false,
+            "facetable": false,
+            "key": false
+        },
+        {
+            "name": "chunk",
+            "type": "Edm.String",
+            "searchable": true,
+            "filterable": false,
+            "retrievable": true,
+            "stored": true,
+            "sortable": false,
+            "facetable": false,
+            "key": false
+        },
+        {
+            "name": "text_vector",
+            "type": "Collection(Edm.Single)",
+            "searchable": true,
+            "filterable": false,
+            "retrievable": true,
+            "stored": true,
+            "sortable": false,
+            "facetable": false,
+            "key": false,
+            "dimensions": 3072,
+            "vectorSearchProfile": "{INDEX_NAME}-text-profile",
+            "synonymMaps": []
+        }
+    ],
+    "similarity": {
+        "@odata.type": "#Microsoft.Azure.Search.BM25Similarity"
+    },
+    "semantic": {
+        "defaultConfiguration": "default",
+        "configurations": [
+            {
+                "name": "default",
+                "prioritizedFields": {
+                    "titleField": {
+                        "fieldName": "title"
+                    },
+                    "prioritizedContentFields": [
+                        {
+                            "fieldName": "chunk"
+                        }
+                    ],
+                    "prioritizedKeywordsFields": []
+                }
+            }
+        ]
+    },
+    "vectorSearch": {
+        "profiles": [
+            {
+                "name": "{INDEX_NAME}-text-profile",
+                "algorithm": "{INDEX_NAME}-algorithm",
+                "vectorizer": "{INDEX_NAME}-text-vectorizer"
+            }
+        ],
+        "algorithms": [
+            {
+                "name": "{INDEX_NAME}-algorithm",
+                "kind": "hnsw",
+                "hnswParameters": {
+                    "metric": "cosine",
+                    "m": 4,
+                    "efConstruction": 400,
+                    "efSearch": 500
+                }
+            }
+        ],
+        "vectorizers": [
+            {
+                "name": "{INDEX_NAME}-text-vectorizer",
+                "kind": "azureOpenAI",
+                "azureOpenAIParameters": {
+                    "resourceUri": "{AZURE_OPENAI_RESOURCE_URI}",
+                    "deploymentId": "{SEARCH_EMBEDDING_MODEL_ID}",
+                    "modelName": "{EMBEDDING_MODEL_NAME}"
+                }
+            }
+        ]
+    }
+}

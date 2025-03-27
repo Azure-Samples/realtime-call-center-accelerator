@@ -42,6 +42,20 @@ param searchTitleField string
 param searchEmbeddingField string
 param searchUseVectorQuery bool
 
+@description('Name of the AI search index to be created or updated, must be lowercase.')
+param indexName string = 'voicerag-intvect'
+
+@description('Datasource definition as base64 encoded json.')
+param dataSource string = loadFileAsBase64('definitions/datasource.json')
+
+@description('Index definition as base64 encoded json.')
+param index string = loadFileAsBase64('definitions/index.json')
+
+@description('Skillset definition as base64 encoded json.')
+param skillset string = loadFileAsBase64('definitions/skillset.json')
+
+@description('Indexer definition as base64 encoded json.')
+param indexer string = loadFileAsBase64('definitions/indexer.json')
 
 param storageAccountName string = ''
 param storageContainerName string = 'content'
@@ -49,6 +63,8 @@ param storageSkuName string = 'Standard_LRS'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
+var scriptIdentityName = 'scriptIdentity-${resourceToken}'
+var aiSearchIndexDeploymentScriptName = 'aiSearchIndexDeploymentScript-${resourceToken}'
 var tags = { 'azd-env-name': environmentName, 'app': 'audio-agents', 'tracing': 'yes' }
 var principalType = 'User'
 
@@ -121,6 +137,7 @@ module openai './ai/openai.bicep' = {
   }
 }
 
+
 module monitoring './core/monitor/monitoring.bicep' = {
   name: 'monitoring'
   scope: resourceGroup
@@ -129,6 +146,29 @@ module monitoring './core/monitor/monitoring.bicep' = {
     tags: tags
     logAnalyticsName: !empty(logAnalyticsName) ? logAnalyticsName : '${abbrs.operationalInsightsWorkspaces}${resourceToken}'
     applicationInsightsName: !empty(applicationInsightsName) ? applicationInsightsName : '${abbrs.insightsComponents}${resourceToken}'
+  }
+}
+
+module security 'core/security/security-main.bicep' = {
+  name: 'security'
+  scope: resourceGroup
+  params: {
+    openaiName: openai.outputs.openaiName
+    containerRegistryName: containerApps.outputs.registryName
+    principalIds: [
+      containerApps.outputs.identityPrincipalId
+      searchService.outputs.systemAssignedMIPrincipalId
+      principalId
+    ]
+  }
+}
+
+module scriptIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
+  name: 'scriptIdentity'
+  scope: resourceGroup
+  params: {
+    name: scriptIdentityName
+    location: resourceGroup.location
   }
 }
 
@@ -167,9 +207,15 @@ module searchService 'br/public:avm/res/search/search-service:0.7.1' =  {
         principalId: principalId
         principalType: principalType
       }
+      {
+        roleDefinitionIdOrName: 'Search Service Contributor'
+        principalId: scriptIdentity.outputs.principalId
+        principalType: 'ServicePrincipal'
+      }
     ]
   }
 }
+
 
 module storage 'br/public:avm/res/storage/storage-account:0.9.1' = {
   name: 'storage'
@@ -229,15 +275,30 @@ module communicationService 'core/communicationservice/communication-services.bi
   }
 }
 
+module aiSearchIndexDeploymentScript 'br/public:avm/res/resources/deployment-script:0.4.0' = {
+  name: 'aiSearchIndexDeploymentScript'
+  scope: resourceGroup
+  params: {
+    kind: 'AzurePowerShell'
+    name: aiSearchIndexDeploymentScriptName
+    azPowerShellVersion: '9.7'
+    location: resourceGroup.location
+    managedIdentities: {
+      userAssignedResourcesIds: [
+        scriptIdentity.outputs.resourceId
+      ]
+    }
+    cleanupPreference: 'OnExpiration'
+    retentionInterval: 'PT1H'
+    scriptContent: loadTextContent('scripts/setupindex.ps1')
+    arguments: '-index \\"${index}\\" -indexer \\"${indexer}\\" -datasource \\"${dataSource}\\" -skillset \\"${skillset}\\" -searchServiceName \\"${searchService.outputs.name}\\" -dataSourceContainerName \\"${storageContainerName}\\" -dataSourceConnectionString \\"ResourceId=${storage.outputs.resourceId};\\" -indexName \\"${indexName}\\" -AzureOpenAIResourceUri \\"${openai.outputs.openaiEndpoint}\\" -indexerEmbeddingModelId \\"${embedModel}\\" -embeddingModelName \\"${embedModel}\\" -searchEmbeddingModelId \\"${embedModel}\\"'
+  }
+}
+
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
   scope: resourceGroup
 }
-
-// resource aiSearch 'Microsoft.Search/searchServices@2024-06-01-preview' existing = {
-//   name: searchServiceName
-//   scope: resourceGroup
-// }
 
 // Outputs
 output ACS_CONNECTION_STRING string = communicationService.outputs.primaryConnectionString
@@ -264,12 +325,10 @@ output APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applica
 output APPLICATIONINSIGHTS_NAME string = monitoring.outputs.applicationInsightsName
 output PRINCIPAL_ID string = principalId
 
-output AZURE_STORAGE_ENDPOINT string = 'https://${storageAccount.name}.blob.core.windows.net/'
+output AZURE_STORAGE_ENDPOINT string = 'https://${storage.outputs.name}.blob.core.windows.net/'
 output AZURE_STORAGE_ACCOUNT string = storage.outputs.name
-#disable-next-line outputs-should-not-contain-secrets
-output AZURE_STORAGE_CONNECTION_STRING string = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=core.windows.net'
-output AZURE_STORAGE_CONTAINER string = storageContainerName
 
+output AZURE_STORAGE_CONTAINER string = storageContainerName
 output AZURE_SEARCH_ENDPOINT string = 'https://${searchService.outputs.name}.search.windows.net'
 output AZURE_SEARCH_INDEX string = searchIndexName
 output AZURE_SEARCH_SEMANTIC_CONFIGURATION string = searchSemanticConfiguration

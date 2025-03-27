@@ -30,10 +30,10 @@ At the moment, the configuration of Azure Communication Services phone number is
 
 ### Configure the search index
 
-The file `scripts/setup_intvect.py` creates index and chunks the provided documents from data folder.
+The file `scripts/upload_data.py` creates index and chunks the provided documents from data folder.
 
 ```bash
-python scripts/setup_intvect.py
+python scripts/upload_data.py
 ```
 
 ### Deploy the application

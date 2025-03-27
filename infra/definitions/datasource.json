@@ -1,0 +1,10 @@
+{
+    "name": "{INDEX_NAME}-datasource",
+    "type": "azureblob",
+    "credentials": {
+        "connectionString": "{DATA_SOURCE_CONNECTION_STRING}"
+    },
+    "container": {
+        "name": "{DATA_SOURCE_CONTAINER_NAME}"
+    }
+}
