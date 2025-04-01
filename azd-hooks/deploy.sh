@@ -100,9 +100,13 @@ echo "deploying image: $IMAGE_NAME"
 # Deploy the container app
 ACA_NAME=callcenter$SERVICE_NAME
 URI=$(az deployment group create -g $RESOURCE_GROUP -f ./infra/core/app/web.bicep \
-          -p aiSearchName=$AZURE_SEARCH_NAME  -p storageAccountName=$STORAGE_ACCOUNT_NAME -p name=$ACA_NAME -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
-          -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME -p communicationServiceName=$AZURE_COMMUNICATION_SERVICES_NAME -p serviceName=$SERVICE_NAME  \
-          -p communicationServicePhoneNumber=$AZURE_COMMUNICATION_SERVICES_PHONE_NUMBER -p openaiName=$OPENAI_NAME -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME -p --query properties.outputs.uri.value)
+          -p aiSearchName=$AZURE_SEARCH_NAME  -p storageAccountName=$STORAGE_ACCOUNT_NAME -p name=$ACA_NAME \
+          -p location=$LOCATION -p containerAppsEnvironmentName=$ENVIRONMENT_NAME \
+          -p containerRegistryName=$AZURE_CONTAINER_REGISTRY_NAME -p applicationInsightsName=$APPINSIGHTS_NAME \
+          -p communicationServiceName=$AZURE_COMMUNICATION_SERVICES_NAME -p serviceName=$SERVICE_NAME  \
+          -p communicationServicePhoneNumber=$AZURE_COMMUNICATION_SERVICES_PHONE_NUMBER \
+          -p openaiName=$OPENAI_NAME -p identityName=$IDENTITY_NAME -p imageName=$IMAGE_NAME \
+          --query properties.outputs.uri.value)
 
 echo "updating container app settings"
 
@@ -111,16 +115,17 @@ CONTAINER_APP_HOSTNAME=$(az containerapp show --name $ACA_NAME --resource-group 
 
 # Update the container app settings
 az containerapp update --name $ACA_NAME --resource-group $RESOURCE_GROUP \
---set-env-vars ACS_CALLBACK_PATH="https://$CONTAINER_APP_HOSTNAME/acs" ACS_MEDIA_STREAMING_WEBSOCKET_PATH="wss://$CONTAINER_APP_HOSTNAME/realtime-acs" \
+--set-env-vars ACS_CALLBACK_PATH="https://$CONTAINER_APP_HOSTNAME/acs" \
+               ACS_MEDIA_STREAMING_WEBSOCKET_PATH="wss://$CONTAINER_APP_HOSTNAME/realtime-acs" \
                AZURE_SEARCH_API_KEY="$AZURE_SEARCH_API_KEY" AZURE_SEARCH_INDEX="$AZURE_SEARCH_INDEX_NAME"  \
                AZURE_SEARCH_SEMANTIC_CONFIGURATION="$AZURE_SEARCH_SEMANTIC_CONFIGURATION"
 
 echo "Application uri: $URI"
 
 # Configuration of Azure AI search index
-echo "Executing setup_intvect.py to configure Azure AI search index"
+echo "Executing upload_data.sh to upload documents to Azure blob storage"
 SCRIPT_DIR=$(dirname "$0")
 PROJECT_ROOT="$SCRIPT_DIR/../"
 cd "$PROJECT_ROOT"
 echo "Current directory after changing to project root: $(pwd)"
-python scripts/setup_intvect.py
+sh scripts/upload_data.sh

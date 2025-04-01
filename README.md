@@ -28,14 +28,6 @@ At the moment, the configuration of Azure Communication Services phone number is
 1. Add a Phone Number to the Azure Communication Services resource
 1. Add an `ACS_SOURCE_NUMBER=xxx` environment variable to the `.azure/xxx/.env` file with the phone number
 
-### Configure the search index
-
-The file `scripts/upload_data.py` creates index and chunks the provided documents from data folder.
-
-```bash
-python scripts/upload_data.py
-```
-
 ### Deploy the application
 
 To deploy the application, you can use the following script:
