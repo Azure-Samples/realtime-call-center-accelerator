@@ -2,11 +2,13 @@
 
 One-click deploy Azure Solution Accelerator for Call Center Automation with OpenAI real-time and Azure Communication Service. This solution accelerator provides a reference implementation for an AI assisted call center solution that uses Azure Communication Services to provide a voice channel for customers to interact with. The bot is able to answer questions about Microsoft Azure products for demo purposes.
 
+![Screenshot](screenshot.png)
+
 ## Get it running
 
 ### Set up the Azure Environment
 
-To run this application, you can provision the resources using the Azure Developer CLI.
+To run this application, you can provision the resources to your Azure Subscription using the Azure Developer CLI.
 
 From your command line:
 
@@ -25,7 +27,10 @@ azd up
 
 At the moment, the configuration of Azure Communication Services phone number is not automated. So you will need to follow the following steps manually.
 
-1. Add a Phone Number to the Azure Communication Services resource
+1. Go to the [Azure Portal](https://portal.azure.com) and navigate to the Azure Communication Services resource that has been created
+1. In the left menu, select **Phone numbers** and then click the **Get** button
+1. Select a Country or region and choose **Toll free** as your number type
+1. Follow the instructions to purchase a phone number
 1. Add an `ACS_SOURCE_NUMBER=xxx` environment variable to the `.azure/xxx/.env` file with the phone number
 
 ### Deploy the application
@@ -38,6 +43,12 @@ source <(azd env get-values | grep AZURE_ENV_NAME)
 
 # Building and deploying the user interface and the backend API
 bash ./azd-hooks/deploy.sh app $AZURE_ENV_NAME
+```
+
+When successful, you will see the following output with the URL of the deployed application:
+
+```
+Deployment complete. Application URI: <YOUR_APP>.azurecontainerapps.io
 ```
 
 ## Local Development
@@ -117,8 +128,6 @@ python src/app/app.py
 - [Yimi Wang](https://www.linkedin.com/in/yimiwang/)
 
 ## Related content
-
-[VoiceRAG: An Application Pattern for RAG + Voice Using Azure AI Search and the GPT-4o Realtime API for Audio](https://github.com/Azure-Samples/aisearch-openai-rag-audio)
 
 Based on this solution accelerator: [on-the-road copilot](https://github.com/Azure-Samples/on-the-road-copilot)
 
