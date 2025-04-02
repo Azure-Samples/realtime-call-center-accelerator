@@ -1,5 +1,4 @@
 #!/bin/bash
-
 set -e
 
 # Function to load the Azure Developer CLI environment
@@ -22,8 +21,6 @@ load_azd_env() {
     source "$ENV_FILE_PATH"
     set +o allexport
 }
-
-
 
 upload_documents() {
     # Check for Azure CLI authentication

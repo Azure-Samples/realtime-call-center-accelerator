@@ -1,206 +1,206 @@
 html,
 body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: 'Open Sans', Arial, sans-serif;
-    background-image: url('../static/abstract2.jpg');
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    color: #333;
-    text-align: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', Arial, sans-serif;
+  background-image: url('../static/abstract.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #333;
+  text-align: center;
 }
 
 main.container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    height: 50vh; /* Take up the bottom half */
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 50vh; /* Take up the bottom half */
+  width: 100%;
 }
 
 #configButton {
-    position: fixed;
-    right: 10px;
-    top: 10px;
-    padding: 5px 10px; /* Adjust padding for smaller size */
-    font-size: 14px; /* Adjust font size for smaller text */
+  position: fixed;
+  right: 10px;
+  top: 10px;
+  padding: 5px 10px; /* Adjust padding for smaller size */
+  font-size: 14px; /* Adjust font size for smaller text */
 }
 
 .sidebar {
-    display: none;
-    position: fixed;
-    right: 0;
-    top: 0;
-    width: 20rem;
-    height: 100%;
-    background-color: #f4f4f4;
-    padding: 20px;
-    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-    margin-top: 50px;
-    z-index: 9999; /* Bring the sidebar to the front */
+  display: none;
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 20rem;
+  height: 100%;
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+  margin-top: 50px;
+  z-index: 9999; /* Bring the sidebar to the front */
 }
 
 .sidebar h2 {
-    color: #333;
+  color: #333;
 }
 
 div.main-container {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    height: 50vh;
-    margin-right: 100px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 50vh;
+  margin-right: 100px;
 }
 
 article {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 2rem;
-    border-radius: 10px;
-    max-width: 600px;
-    margin: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  margin: 10px;
 }
 
 .separator {
-    width: 2px;
-    /* Thin bar */
-    background-color: #fff;
-    /* White color */
-    align-self: stretch;
-    /* Stretch to the height of the tallest article */
-    margin: 0 10px;
-    /* Space around the separator */
-    margin-bottom: 10px;
+  width: 2px;
+  /* Thin bar */
+  background-color: #fff;
+  /* White color */
+  align-self: stretch;
+  /* Stretch to the height of the tallest article */
+  margin: 0 10px;
+  /* Space around the separator */
+  margin-bottom: 10px;
 }
 
 h1 {
-    margin-bottom: 30px;
-    color: #fff;
-    font-weight: bold;
-    font-size: 2.5em;
+  margin-bottom: 30px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 2.5em;
 }
 
 h3 {
-    color: #000;
+  color: #000;
 }
 
 .black-button {
-    background-color: #000 !important;
-    color: #fff !important;
-    border: none;
-    cursor: pointer;
-    padding: 10px 20px;
-    font-size: 16px;
+  background-color: #000 !important;
+  color: #fff !important;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 16px;
 }
 
 .black-button:hover {
-    background-color: #333 !important;
+  background-color: #333 !important;
 }
 
 #toggleButton {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    font-size: 16px;
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 16px;
 }
 
 form {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
-form input[type="text"],
+form input[type='text'],
 form button {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto 10px;
-    display: block;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto 10px;
+  display: block;
 }
 
-form input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
+form input[type='text'] {
+  padding: 10px;
+  font-size: 16px;
 }
 
 form button {
-    padding: 10px;
-    font-size: 16px;
+  padding: 10px;
+  font-size: 16px;
 }
 
 #statusMessage {
-    margin-top: 20px;
-    font-size: 16px;
+  margin-top: 20px;
+  font-size: 16px;
 }
 
 #statusMessage:empty {
-    display: none;
+  display: none;
 }
 
 #report {
-    margin-top: 30px;
-    text-align: left;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 15px;
-    border-radius: 5px;
-    max-width: 600px;
-    margin: 0 auto;
-    display: none;
+  margin-top: 30px;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 5px;
+  max-width: 600px;
+  margin: 0 auto;
+  display: none;
 }
 
 #report:not(:empty) {
-    display: block;
+  display: block;
 }
 
 .side-by-side {
-    flex: 1;
-    margin: 10px;
+  flex: 1;
+  margin: 10px;
 }
 
 .flex-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 50vh; /* Take the top half */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh; /* Take the top half */
 }
 
 .titles-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: max-content;  /* Or a fixed width, if desired */
-    margin: 0 auto;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: max-content; /* Or a fixed width, if desired */
+  margin: 0 auto;
+  text-align: center;
 }
 
 .container {
-    flex: 1;
+  flex: 1;
 }
 
 .logo-container {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 .logo-container img {
-    width: 100px;
-    height: auto;
+  width: 100px;
+  height: auto;
 }
 
 .dropdown-container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  text-align: center;
 }
 
 .dropdown-container label {
-    color: #333;
+  color: #333;
 }

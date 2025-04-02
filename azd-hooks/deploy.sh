@@ -120,8 +120,6 @@ az containerapp update --name $ACA_NAME --resource-group $RESOURCE_GROUP \
                AZURE_SEARCH_API_KEY="$AZURE_SEARCH_API_KEY" AZURE_SEARCH_INDEX="$AZURE_SEARCH_INDEX_NAME"  \
                AZURE_SEARCH_SEMANTIC_CONFIGURATION="$AZURE_SEARCH_SEMANTIC_CONFIGURATION"
 
-echo "Application uri: $URI"
-
 # Configuration of Azure AI search index
 echo "Executing upload_data.sh to upload documents to Azure blob storage"
 SCRIPT_DIR=$(dirname "$0")
@@ -129,3 +127,5 @@ PROJECT_ROOT="$SCRIPT_DIR/../"
 cd "$PROJECT_ROOT"
 echo "Current directory after changing to project root: $(pwd)"
 sh scripts/upload_data.sh
+
+echo "Deployment complete. Application URI: $URI"
