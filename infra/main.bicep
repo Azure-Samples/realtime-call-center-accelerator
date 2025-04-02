@@ -63,7 +63,7 @@ param storageSkuName string = 'Standard_LRS'
 
 var abbrs = loadJsonContent('./abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
-var scriptIdentityName = 'scriptIdentity-${resourceToken}'
+
 var aiSearchIndexDeploymentScriptName = 'aiSearchIndexDeploymentScript-${resourceToken}'
 var tags = { 'azd-env-name': environmentName, 'app': 'audio-agents', 'tracing': 'yes' }
 var principalType = 'User'
@@ -109,6 +109,7 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
   tags: tags
 }
+
 
 // Container apps host (including container registry)
 module containerApps './core/host/container-apps.bicep' = {
@@ -163,14 +164,6 @@ module security 'core/security/security-main.bicep' = {
   }
 }
 
-module scriptIdentity 'br/public:avm/res/managed-identity/user-assigned-identity:0.4.0' = {
-  name: 'scriptIdentity'
-  scope: resourceGroup
-  params: {
-    name: scriptIdentityName
-    location: resourceGroup.location
-  }
-}
 
 module searchService 'br/public:avm/res/search/search-service:0.7.1' =  {
   name: 'search-service'
@@ -209,7 +202,7 @@ module searchService 'br/public:avm/res/search/search-service:0.7.1' =  {
       }
       {
         roleDefinitionIdOrName: 'Search Service Contributor'
-        principalId: scriptIdentity.outputs.principalId
+        principalId: containerApps.outputs.identityPrincipalId
         principalType: 'ServicePrincipal'
       }
     ]
@@ -275,6 +268,8 @@ module communicationService 'core/communicationservice/communication-services.bi
   }
 }
 
+
+
 module aiSearchIndexDeploymentScript 'br/public:avm/res/resources/deployment-script:0.4.0' = {
   name: 'aiSearchIndexDeploymentScript'
   scope: resourceGroup
@@ -285,7 +280,7 @@ module aiSearchIndexDeploymentScript 'br/public:avm/res/resources/deployment-scr
     location: resourceGroup.location
     managedIdentities: {
       userAssignedResourcesIds: [
-        scriptIdentity.outputs.resourceId
+        containerApps.outputs.identityResourceId
       ]
     }
     cleanupPreference: 'OnExpiration'

@@ -39,3 +39,4 @@ output environmentName string = containerAppsEnvironment.outputs.name
 output registryLoginServer string = containerRegistry.outputs.loginServer
 output registryName string = containerRegistry.outputs.name
 output identityPrincipalId string = userIdentity.properties.principalId
+output identityResourceId string = userIdentity.id
