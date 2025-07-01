@@ -107,6 +107,10 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
               name: 'AZURE_STORAGE_CONNECTION_STRING'
               value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value}'
             }
+            {
+              name: 'SICK_LEAVE_API_URL'
+              value: ''
+            }
           ]
           resources: {
             cpu: json('1')

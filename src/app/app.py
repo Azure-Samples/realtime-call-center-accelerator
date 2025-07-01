@@ -5,6 +5,7 @@ from typing import Optional
 from aiohttp import web
 from dotenv import load_dotenv
 from backend.tools.rag.ai_search import report_grounding_tool, search_tool
+from backend.tools.sick_leave import sick_leave_request_tool
 from backend.helpers import load_prompt_from_markdown
 from backend.rtmt import RTMiddleTier
 from backend.azure import get_azure_credentials, fetch_prompt_from_azure_storage
@@ -84,6 +85,10 @@ async def create_app():
     if search_client is not None and search_semantic_configuration is not None:
         rtmt.tools["search"] = search_tool(search_client, search_semantic_configuration)
         rtmt.tools["report_grounding"] = report_grounding_tool(search_client)
+    
+    # Register sick leave request tool
+    rtmt.tools["submit_sick_leave"] = sick_leave_request_tool()
+    rtmt.tools["sick_leave_request"] = sick_leave_request_tool()
 
     # Define the WebSocket handler for the Web Frontend
     async def websocket_handler(request: web.Request):
