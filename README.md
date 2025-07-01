@@ -12,6 +12,7 @@ One-click deploy Azure Solution Accelerator for Call Center Automation with Open
 - Ask questions about Azure products
 - Interrupt the bot anytime
 - Customizable knowledge base and system prompt
+- Process sick leave requests via voice
 
 #### What can I ask?
 
@@ -200,6 +201,17 @@ By default, the [hardcoded system prompt](src/app/system_prompt.md) is used. You
 
 - This project was based on [Azure-Samples/on-the-road-copilot](https://github.com/Azure-Samples/on-the-road-copilot)
 - For a more sophisticated full call center solution on Azure, check out [microsoft/call-center-ai](https://github.com/microsoft/call-center-ai)
+
+### Sick Leave Processing
+
+This solution accelerator includes functionality to handle employee sick leave requests via voice calls. When a caller mentions they need to report sick leave, the AI assistant collects relevant information and submits it to a configured API endpoint.
+
+To enable this feature:
+
+1. Configure the `SICK_LEAVE_API_URL` environment variable with your API endpoint
+2. Ensure your API can accept the request format documented in `docs/sick_leave_feature.md`
+
+For more details on this feature, see the [Sick Leave Feature Documentation](docs/sick_leave_feature.md).
 
 ---
 
