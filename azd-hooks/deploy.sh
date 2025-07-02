@@ -118,7 +118,9 @@ az containerapp update --name $ACA_NAME --resource-group $RESOURCE_GROUP \
 --set-env-vars ACS_CALLBACK_PATH="https://$CONTAINER_APP_HOSTNAME/acs" \
                ACS_MEDIA_STREAMING_WEBSOCKET_PATH="wss://$CONTAINER_APP_HOSTNAME/realtime-acs" \
                AZURE_SEARCH_API_KEY="$AZURE_SEARCH_API_KEY" AZURE_SEARCH_INDEX="$AZURE_SEARCH_INDEX_NAME"  \
-               AZURE_SEARCH_SEMANTIC_CONFIGURATION="$AZURE_SEARCH_SEMANTIC_CONFIGURATION"
+               AZURE_SEARCH_SEMANTIC_CONFIGURATION="$AZURE_SEARCH_SEMANTIC_CONFIGURATION" \
+               SICK_LEAVE_API_URL="https://pacific-mock.azurewebsites.net/api/sickleave/apply" \
+               SICK_LEAVE_BALANCE_API_URL="https://pacific-mock.azurewebsites.net/api/sickleave/balance"
 
 # Configuration of Azure AI search index
 echo "Executing upload_data.sh to upload documents to Azure blob storage"
