@@ -109,7 +109,11 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
             }
             {
               name: 'SICK_LEAVE_API_URL'
-              value: ''
+              value: 'https://pacific-mock.azurewebsites.net/api/sickleave/apply'
+            }
+            {
+              name: 'SICK_LEAVE_BALANCE_API_URL'
+              value: 'https://pacific-mock.azurewebsites.net/api/sickleave/balance'
             }
           ]
           resources: {

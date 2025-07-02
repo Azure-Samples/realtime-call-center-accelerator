@@ -8,40 +8,76 @@ The sick leave feature allows employees to report sick leave through the voice a
 
 ## Configuration
 
-To use this feature, you need to set the following environment variable:
+To use this feature, you need to set the following environment variables:
 
 ```
-SICK_LEAVE_API_URL=https://your-api-endpoint.com/sick-leave
+# For submitting sick leave requests
+SICK_LEAVE_API_URL=https://pacific-mock.azurewebsites.net/api/sickleave/apply
+
+# For checking leave balances (optional)
+SICK_LEAVE_BALANCE_API_URL=https://pacific-mock.azurewebsites.net/api/sickleave/balance
 ```
 
-This can be set in your `.env` file for local development or in the Azure environment configuration for production.
+These can be set in your `.env` file for local development or in the Azure environment configuration for production. The deployment script automatically configures these variables in the Azure Container App.
 
 ## API Integration
 
-The system expects the external API to accept POST requests with the following JSON structure:
+### Server Requirements
+
+The leave management server should expose a RESTful API with the following endpoints:
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/sick-leave` | POST | Submit a new sick leave request |
+| `/api/sick-leave/{request_id}` | GET | Get details of a specific sick leave request |
+| `/api/sick-leave/{request_id}` | DELETE | Cancel a sick leave request |
+| `/api/sick-leave/employee/{employee_id}` | GET | Get all sick leave requests for an employee |
+
+Currently, the system is only integrated with the POST endpoint for creating sick leave requests.
+
+### Sick Leave Application
+
+#### Request Format
+
+The system sends POST requests to the apply endpoint with the following JSON structure:
 
 ```json
 {
-  "employee_name": "John Doe",
-  "employee_id": "EMP12345",
-  "start_date": "2025-07-01",
-  "end_date": "2025-07-03",
-  "reason": "Flu symptoms",
-  "contact_phone": "+1234567890",
-  "contact_email": "john.doe@example.com",
-  "notes": "Doctor's appointment scheduled for tomorrow",
-  "timestamp": "2025-07-01T06:52:14.123456",
-  "source": "voice_call_center"
+  "date": "2025-07-01",
+  "employeeId": "default"
 }
 ```
 
-The API is expected to return a response in the following format:
+#### Response Format
+
+The API returns the following response for sick leave applications:
 
 ```json
 {
   "success": true,
-  "request_id": "SL-12345",
-  "message": "Request processed successfully"
+  "message": "Your sick leave request has been processed successfully",
+  "remainingBalance": 10.5
+}
+```
+
+### Sick Leave Balance Check
+
+#### Request Format
+
+The system sends GET requests to the balance endpoint, optionally with an employee ID as a query parameter:
+
+```
+GET /api/sickleave/balance?employeeId=default
+```
+
+#### Response Format
+
+The API returns the following response for balance checks:
+
+```json
+{
+  "balance": 10.5,
+  "updatedAt": "2025-07-01T12:34:56Z"
 }
 ```
 

@@ -208,10 +208,29 @@ This solution accelerator includes functionality to handle employee sick leave r
 
 To enable this feature:
 
-1. Configure the `SICK_LEAVE_API_URL` environment variable with your API endpoint
+1. Configure the following environment variables with your API endpoints:
+   - `SICK_LEAVE_API_URL`: https://pacific-mock.azurewebsites.net/api/sickleave/apply (for submitting sick leave requests)
+   - `SICK_LEAVE_BALANCE_API_URL`: https://pacific-mock.azurewebsites.net/api/sickleave/balance (for checking leave balances)
 2. Ensure your API can accept the request format documented in `docs/sick_leave_feature.md`
 
-For more details on this feature, see the [Sick Leave Feature Documentation](docs/sick_leave_feature.md).
+#### Leave Management Server Integration
+
+Your leave management server should expose a RESTful API endpoint for accepting sick leave requests. The accelerator will send POST requests with employee information and leave details to this endpoint.
+
+**Setting up for development:**
+```bash
+# Create a .env file in src/app directory
+echo "SICK_LEAVE_API_URL=https://your-leave-server.example.com/api/sick-leave" > src/app/.env
+
+# For testing with a mock server
+npm install -g json-server
+json-server --watch src/app/mock-leave-api.json --port 3000
+# Then set SICK_LEAVE_API_URL=http://localhost:3000/sick-leave
+```
+
+For more details on this feature, see:
+- [Sick Leave Feature Documentation](docs/sick_leave_feature.md)
+- [Leave API Configuration](docs/leave_api_config.md)
 
 ---
 
