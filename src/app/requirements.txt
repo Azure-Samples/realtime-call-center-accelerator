@@ -1,4 +1,4 @@
-aiohttp==3.11.10
+aiohttp==3.12.14
 azure-identity==1.19.0
 azure-eventgrid==4.20.0
 azure-communication-callautomation==1.4.0b1
